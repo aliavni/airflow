@@ -1326,20 +1326,6 @@ export const $PluginResponse = {
       type: "string",
       title: "Name",
     },
-    hooks: {
-      items: {
-        type: "string",
-      },
-      type: "array",
-      title: "Hooks",
-    },
-    executors: {
-      items: {
-        type: "string",
-      },
-      type: "array",
-      title: "Executors",
-    },
     macros: {
       items: {
         type: "string",
@@ -1418,8 +1404,6 @@ export const $PluginResponse = {
   type: "object",
   required: [
     "name",
-    "hooks",
-    "executors",
     "macros",
     "flask_blueprints",
     "fastapi_apps",
@@ -1454,6 +1438,91 @@ export const $PoolCollectionResponse = {
   required: ["pools", "total_entries"],
   title: "PoolCollectionResponse",
   description: "Pool Collection serializer for responses.",
+} as const;
+
+export const $PoolPatchBody = {
+  properties: {
+    pool: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Pool",
+    },
+    slots: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Slots",
+    },
+    description: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Description",
+    },
+    include_deferred: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Include Deferred",
+    },
+  },
+  type: "object",
+  title: "PoolPatchBody",
+  description: "Pool serializer for patch bodies.",
+} as const;
+
+export const $PoolPostBody = {
+  properties: {
+    name: {
+      type: "string",
+      title: "Name",
+    },
+    slots: {
+      type: "integer",
+      title: "Slots",
+    },
+    description: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Description",
+    },
+    include_deferred: {
+      type: "boolean",
+      title: "Include Deferred",
+      default: false,
+    },
+  },
+  type: "object",
+  required: ["name", "slots"],
+  title: "PoolPostBody",
+  description: "Pool serializer for post bodies.",
 } as const;
 
 export const $PoolResponse = {
@@ -1819,4 +1888,28 @@ export const $VariableResponse = {
   required: ["key", "description", "value"],
   title: "VariableResponse",
   description: "Variable serializer for responses.",
+} as const;
+
+export const $VersionInfo = {
+  properties: {
+    version: {
+      type: "string",
+      title: "Version",
+    },
+    git_version: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Git Version",
+    },
+  },
+  type: "object",
+  required: ["version", "git_version"],
+  title: "VersionInfo",
+  description: "Version information serializer for responses.",
 } as const;

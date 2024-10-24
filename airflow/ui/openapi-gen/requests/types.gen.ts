@@ -310,8 +310,6 @@ export type PluginCollectionResponse = {
  */
 export type PluginResponse = {
   name: string;
-  hooks: Array<string>;
-  executors: Array<string>;
   macros: Array<string>;
   flask_blueprints: Array<string>;
   fastapi_apps: Array<FastAPIAppResponse>;
@@ -331,6 +329,26 @@ export type PluginResponse = {
 export type PoolCollectionResponse = {
   pools: Array<PoolResponse>;
   total_entries: number;
+};
+
+/**
+ * Pool serializer for patch bodies.
+ */
+export type PoolPatchBody = {
+  pool?: string | null;
+  slots?: number | null;
+  description?: string | null;
+  include_deferred?: boolean | null;
+};
+
+/**
+ * Pool serializer for post bodies.
+ */
+export type PoolPostBody = {
+  name: string;
+  slots: number;
+  description?: string | null;
+  include_deferred?: boolean;
 };
 
 /**
@@ -431,6 +449,14 @@ export type VariableResponse = {
   key: string;
   description: string | null;
   value: string | null;
+};
+
+/**
+ * Version information serializer for responses.
+ */
+export type VersionInfo = {
+  version: string;
+  git_version: string | null;
 };
 
 export type NextRunAssetsData = {
@@ -595,6 +621,14 @@ export type GetPoolData = {
 
 export type GetPoolResponse = PoolResponse;
 
+export type PatchPoolData = {
+  poolName: string;
+  requestBody: PoolPatchBody;
+  updateMask?: Array<string> | null;
+};
+
+export type PatchPoolResponse = PoolResponse;
+
 export type GetPoolsData = {
   limit?: number;
   offset?: number;
@@ -602,6 +636,12 @@ export type GetPoolsData = {
 };
 
 export type GetPoolsResponse = PoolCollectionResponse;
+
+export type PostPoolData = {
+  requestBody: PoolPostBody;
+};
+
+export type PostPoolResponse = PoolResponse;
 
 export type GetProvidersData = {
   limit?: number;
@@ -616,6 +656,8 @@ export type GetPluginsData = {
 };
 
 export type GetPluginsResponse = PluginCollectionResponse;
+
+export type GetVersionResponse = VersionInfo;
 
 export type $OpenApiTs = {
   "/ui/next_run_assets/{dag_id}": {
@@ -1166,6 +1208,35 @@ export type $OpenApiTs = {
         422: HTTPValidationError;
       };
     };
+    patch: {
+      req: PatchPoolData;
+      res: {
+        /**
+         * Successful Response
+         */
+        200: PoolResponse;
+        /**
+         * Bad Request
+         */
+        400: HTTPExceptionResponse;
+        /**
+         * Unauthorized
+         */
+        401: HTTPExceptionResponse;
+        /**
+         * Forbidden
+         */
+        403: HTTPExceptionResponse;
+        /**
+         * Not Found
+         */
+        404: HTTPExceptionResponse;
+        /**
+         * Validation Error
+         */
+        422: HTTPValidationError;
+      };
+    };
   };
   "/public/pools/": {
     get: {
@@ -1187,6 +1258,27 @@ export type $OpenApiTs = {
          * Not Found
          */
         404: HTTPExceptionResponse;
+        /**
+         * Validation Error
+         */
+        422: HTTPValidationError;
+      };
+    };
+    post: {
+      req: PostPoolData;
+      res: {
+        /**
+         * Successful Response
+         */
+        201: PoolResponse;
+        /**
+         * Unauthorized
+         */
+        401: HTTPExceptionResponse;
+        /**
+         * Forbidden
+         */
+        403: HTTPExceptionResponse;
         /**
          * Validation Error
          */
@@ -1221,6 +1313,16 @@ export type $OpenApiTs = {
          * Validation Error
          */
         422: HTTPValidationError;
+      };
+    };
+  };
+  "/public/version/": {
+    get: {
+      res: {
+        /**
+         * Successful Response
+         */
+        200: VersionInfo;
       };
     };
   };
